@@ -10,7 +10,7 @@ const app = express();
  
 const port = process.env.PORT || 8080
 
-var whitelist = ['http://justnow.vercel.app', 'http://localhost:3000', 'https://justnow.vercel.app', 'https://localhost:3000'];
+var whitelist = ['https://mern-chatting.herokuapp.com/test','http://mern-chatting.herokuapp.com/test', 'http://justnow.vercel.app', 'http://localhost:3000', 'https://justnow.vercel.app', 'https://localhost:3000'];
 const cors = require('cors');
 // app.use(cors({
 //     origin: function (origin, callback) {
@@ -35,7 +35,7 @@ const routeHandler = require('./routes/routes');
 app.use('/api', routeHandler);
 
 app.use("/test", (req, res) => {
-    res.send("Chat server is runing good")
+    res.status(200).send({ data: "This is justnowv1 server Index. Use the respective routes to begin." })
 })
 
 
