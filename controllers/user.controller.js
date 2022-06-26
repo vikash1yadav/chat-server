@@ -44,7 +44,7 @@ module.exports.updateUser = async (req, res, next) => {
     @access public
 */
 module.exports.getUser = async (req, res, next) => {
-    console.log('amk');
+    console.log("hit user login");
     const { userName, password } = req.query;
     try {
         const result = await user.findOne({ userName });

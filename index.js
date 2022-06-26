@@ -8,9 +8,9 @@ dotenv.config({ path: path.resolve(__dirname, 'config', 'config.env') });
 const express = require('express');
 const app = express();
  
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 8080
 
-var whitelist = ['http://192.168.43.201:3000', 'http://localhost:3000', 'https://192.168.43.201:3000', 'https://localhost:3000'];
+var whitelist = ['http://justnow.vercel.app', 'http://localhost:3000', 'https://justnow.vercel.app', 'https://localhost:3000'];
 const cors = require('cors');
 // app.use(cors({
 //     origin: function (origin, callback) {
@@ -28,11 +28,16 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 //for reading request.body
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json({ extended: false }));
 
 //handling all rountes here
 const routeHandler = require('./routes/routes');
 app.use('/api', routeHandler);
+
+app.use("/test", (req, res) => {
+    res.send("Chat server is runing good")
+})
+
 
 //handling all errors from routes here
 const errorHandler = require('./errorHandler/errorHandler.middleware');
@@ -44,25 +49,30 @@ connectDB('chatApp');
 
 //setting up http server
 var server;
-if (process.env.mode === 'production') {
-    const http = require('http');
-    server = http.Server(app);
-}
-else {
-    const fs = require('fs');
-    const options = {
-        key: fs.readFileSync('key.pem'),
-        cert: fs.readFileSync('cert.pem')
-    };
+const http = require('http');
+server = http.Server(app);
+// if (process.env.mode === 'production') {
+//     console.log("hit true");
+//     const http = require('http');
+//     server = http.Server(app);
+// }
+// else {
+//     console.log("hit else");
+//     const fs = require('fs');
+//     const options = {
+//         key: fs.readFileSync('key.pem'),
+//         cert: fs.readFileSync('cert.pem')
+//     };
 
-    server = require('https').Server(options, app);
-}
+//     server = require('https').Server(options, app);
+// }
 
-//init socket.io
-const io = require('socket.io')(server, {
+// init socket.io
+const io = require('socket.io')(server,{
     cors: {
-        origin: whitelist,
-        methods: ["GET", "POST"]
+        origin: whitelist,//"http://localhost:3000",
+         //"https://justnow.vercel.app",//whitelist,
+        // methods: ["GET", "POST"]
     }
 });
 const socketHandler = require('./socketHandler/socketHandler');
@@ -70,16 +80,11 @@ socketHandler(io);
 
 
 //setting up peerServer
-var ExpressPeerServer = require('peer').ExpressPeerServer;
-var options = {
-    debug: true
-}
-app.use('/peerjs', ExpressPeerServer(server, options));
-
-app.use("/", (req, res)=>{ 
-    console.log("hey this is loal host");
-    res.send("vikas kumar")
-})
+// var ExpressPeerServer = require('peer').ExpressPeerServer;
+// var options = {
+//     debug: true
+// }
+// app.use('/peerjs', ExpressPeerServer(server, options));
 
 
  
@@ -87,11 +92,15 @@ app.use("/", (req, res)=>{
 server.listen(port, () => {
     console.log(`server listeneing on port ${port} in ${process.env.MODE} mode`);
 });
+// const io = require('socket.io') (server)
+// const socketHandler = require('./socketHandler/socketHandler');
+// socketHandler(io);
+// app.use('/peerjs', ExpressPeerServer(server, options));
 
 //close server on unhandeled rejections
-process.on('unhandeledRejection', (err, promise) => {
-    console.log(err.message);
-    server.close(() => {
-        process.exit("terminating the process");
-    })
-});
+// process.on('unhandeledRejection', (err, promise) => {
+//     console.log("close server", err.message);
+//     server.close(() => {
+//         process.exit("terminating the process");
+//     })
+// });
