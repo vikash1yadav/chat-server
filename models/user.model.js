@@ -20,10 +20,14 @@ const userSchema = new mongoose.Schema({
         required: [true, 'username is required in user model'],
         unique: true
     },
+    fullName: {
+        type: String,
+        required: [true, 'fullname is required in user model'],
+        unique: false
+    },
     phoneNo: {
         type: String,
         required: [true, 'phone no. is required in user model'],
-        unique: true
     },
     isVerified: {
         type: Boolean,

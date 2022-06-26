@@ -10,12 +10,14 @@ const user = require('../models/user.model');
 */
 module.exports.createUser = async (req, res, next) => {
     try {
-        const { userName, phoneNo, password } = req.body;
-        const result = await user.create({ userName, phoneNo, password });
+        const { userName, fullName, phoneNo, password } = req.body;
+        console.log(req.body);
+        const result = await user.create({ userName, fullName, phoneNo, password });
         res.locals = result;
         next();
     }
     catch (err) {
+        console.log("error",err);
         next({ status: 400, message: err.message, stack: err.stack });
     }
 }
