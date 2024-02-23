@@ -27,6 +27,7 @@ const cors = require('cors');
 app.use(cors());
 //serving static files
 app.use(express.static(path.join(__dirname, 'static')));
+// app.use(express.static(path.join(__dirname, "/web/build")));
 
 //for reading request.body
 app.use(express.urlencoded({ extended: false }));
@@ -39,7 +40,10 @@ app.use('/api', routeHandler);
 app.use("/test", (req, res) => {
     res.status(200).send({ data: "This is justnowv1 server Index. Use the respective routes to begin." })
 })
-
+// app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(__dirname, "web", "build", "index.html"))
+//   );
+app.use(express.static(path.join(__dirname, "/web/build")));
 
 //handling all errors from routes here
 const errorHandler = require('./errorHandler/errorHandler.middleware');
@@ -82,12 +86,12 @@ const socketHandler = require('./socketHandler/socketHandler');
 socketHandler(io);
 
 
-//setting up peerServer
-// var ExpressPeerServer = require('peer').ExpressPeerServer;
-// var options = {
-//     debug: true
-// }
-// app.use('/peerjs', ExpressPeerServer(server, options));
+// setting up peerServer
+var ExpressPeerServer = require('peer').ExpressPeerServer;
+var options = {
+    debug: true
+}
+app.use('/peerjs', ExpressPeerServer(server, options));
 
 
  
