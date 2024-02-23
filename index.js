@@ -87,11 +87,11 @@ socketHandler(io);
 
 
 // setting up peerServer
-var ExpressPeerServer = require('peer').ExpressPeerServer;
-var options = {
-    debug: true
-}
-app.use('/peerjs', ExpressPeerServer(server, options));
+// var ExpressPeerServer = require('peer').ExpressPeerServer;
+// var options = {
+//     debug: true
+// }
+// app.use('/peerjs', ExpressPeerServer(server, options));
 
 
  
