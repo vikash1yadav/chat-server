@@ -10,7 +10,9 @@ const app = express();
  
 const port = process.env.PORT || 8080
 
-var whitelist = ['https://mern-chatting.herokuapp.com/test','http://mern-chatting.herokuapp.com/test', 'http://justnow.vercel.app', 'http://localhost:3000', 'https://justnow.vercel.app', 'https://localhost:3000'];
+var whitelist = ['https://mern-chatting.herokuapp.com/test','http://mern-chatting.herokuapp.com/test',
+ 'http://justnow.vercel.app', 'http://localhost:3000', 'https://localhost:3000',
+];
 const cors = require('cors');
 // app.use(cors({
 //     origin: function (origin, callback) {
@@ -75,6 +77,7 @@ const io = require('socket.io')(server,{
         // methods: ["GET", "POST"]
     }
 });
+
 const socketHandler = require('./socketHandler/socketHandler');
 socketHandler(io);
 
